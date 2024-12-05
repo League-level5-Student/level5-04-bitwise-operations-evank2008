@@ -60,7 +60,7 @@ public class _03_DecimalToBinary {
 
     public static String convertDecimalToBinary(int decimalNum) {
         String binaryStr = "";
-
+        
         do {
             // 1. Logical right shift by 1
             int quotient = decimalNum >>> 1;

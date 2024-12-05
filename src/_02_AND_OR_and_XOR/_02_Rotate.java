@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import _00_Binary_Conversion._02_BinaryToDecimal;
+
 /*
  * Goal: Implement left and right rotate methods.
  * 
@@ -27,14 +29,41 @@ import org.junit.jupiter.api.Test;
  *      11111111 11111111 11111111 11110001   // rotate left by 1
  */
 public class _02_Rotate {
-    
+    //dont make a char array, use string. char array makes the size too small.
     int rotateLeft(int value, int rotateAmount) {
-        return -1;
+    	String bum = Integer.toBinaryString(value);
+    	for(int i = rotateAmount;i>0;i--) {
+    	char c = bum.charAt(0);
+    	bum=bum.substring(1)+c;
+    	}
+    	//so the rotation is correct but it wont convert to decimal fsr
+    	_02_BinaryToDecimal d = new _02_BinaryToDecimal();
+    	int n = d.convertBinaryStringToDecimalInt(bum);
+    	return n;
     }
     
     int rotateRight(int value, int rotateAmount) {
-        return -1;
-    }
+    	String bum = Integer.toBinaryString(value);
+    	for(int i = rotateAmount;i>0;i--) {
+    	System.out.println("Unchanged binary: "+bum);
+    	
+    	char last = bum.charAt(bum.length()-1);
+    	bum=bum.substring(0,bum.length()-1);
+    	if(last=='1') {
+    		//total string length must be 32
+    		int spotsLeft=32-(bum.length()+1);
+    		String zeroes="";
+    		for(int j=spotsLeft;j>0;j--) {
+    			zeroes+="0";
+    		}
+    		bum=last+zeroes+bum;
+    	}
+    	System.out.println("Rotated binary: "+bum);
+    	}
+    	_02_BinaryToDecimal d = new _02_BinaryToDecimal();
+    	int n = d.convertBinaryStringToDecimalInt(bum);
+    	return n;
+    	}
     
     @Test
     void testRotateLeft() {
