@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -52,11 +53,38 @@ public class _02_HexadecimalPrinter implements ActionListener {
      * You don't have to handle negative numbers unless you want the challenge!
      */
     String binaryToHex(String binaryStr) {
-        return "-";
+    	char[] hexDigit = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+    	//string will be only 8 digits
+    	String hexStr = "";
+    	//4 bits per digit
+    	try {
+    	for(int i = 0;i<8;i++) {
+    		//get binary digits from 4i to 4(i+1)
+    		String slice = binaryStr.substring(4*i, 4*(i+1));
+    		//how convert a slice to hex?
+    		//convert to dec >:P
+    		int g = Integer.parseInt(binaryToDec(slice));
+    		hexStr+=hexDigit[g];
+    	}
+    	
+        return hexStr;
+    	} catch(Exception e) {
+    		return "-";
+    	}
     }
     
-    String binaryToDec(String binaryStr) {
-        return "-";
+    String binaryToDec(String binStr) {
+    	
+        	int decimalNum=0;
+        	int placeValue=1;
+        	for(int i=binStr.length()-1;i>-1;i--) {
+        		if(binStr.charAt(i)=='1') {
+        			decimalNum+=placeValue;
+        		}
+        		placeValue*=2;
+        	}
+        	String s = ""+decimalNum;
+        	return s;  
     }
 
     /*
@@ -66,15 +94,28 @@ public class _02_HexadecimalPrinter implements ActionListener {
         if (binaryStr.length() != 8) {
             return "-";
         }
-
-        return "-";
+        char c = (char)(Integer.parseInt(binaryToDec(binaryStr)));
+        return ""+c;
     }
     
     public static void main(String[] args) {
+    	
         new _02_HexadecimalPrinter().start();
     }
 
     public void start() {
+    	
+    	String binStr="";
+    	for(int i = 0;i<32;i++) {
+    		if(new Random().nextBoolean()) {
+    			binStr+="1";
+    		}else {
+    			binStr+="0";
+    		}
+    	}
+    	System.out.println("binary: "+binStr);
+    	System.out.println("hex: "+binaryToHex(binStr));
+    	
         frame = new JFrame("Hexadecimal Printer");
         panel = new JPanel();
         panel.setLayout(new GridBagLayout());
