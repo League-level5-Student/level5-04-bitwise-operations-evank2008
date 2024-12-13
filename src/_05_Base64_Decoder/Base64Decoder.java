@@ -1,5 +1,7 @@
 package _05_Base64_Decoder;
 
+import java.util.ArrayList;
+
 /*
  * Base 64 is a way of encoding binary data using text.
  * Each number 0-63 is mapped to a character.
@@ -56,19 +58,78 @@ public class Base64Decoder {
     //1. Complete this method so that it returns the index in
     //   the base64Chars array that corresponds to the passed in char.
     public static byte convertBase64Char(char c){
-        return 0;
+    	for(byte b = 0;b<64;b++) {
+    		if(base64Chars[b]==c) {
+    			return b;
+    		}
+    	}
+    	return -1;
     }
 
     //2. Complete this method so that it will take in a string that is 4
     //   characters long and return an array of 3 bytes (24 bits). The byte
     //   array should be the binary value of the encoded characters.
     public static byte[] convert4CharsTo24Bits(String s){
-        return null;
+    	byte[] cb = new byte[4];
+    	byte[] bs = new byte[3];
+    	
+    	for(int i = 0; i<4;i++) {
+    		cb[i]=convertBase64Char(s.charAt(i));
+    	}
+    	
+    	bs[0] = (byte) (cb[0]<<2+cb[1]>>4); //last 6 of cb[0] and first 2 of cb[1]
+    	bs[1] = (byte) (cb[1]<<4+cb[2]>>2); //last 4 of cb[1] and first 4 of cb[2]
+    	bs[2] = (byte) (cb[2]<<4+cb[3]); //last 2 of cb[2] and first 6 of cb[3]
+    	return bs;
     }
 
     //3. Complete this method so that it takes in a string of any length
     //   and returns the full byte array of the decoded base64 characters.
     public static byte[] base64StringToByteArray(String file) {
-        return null;
+    	ArrayList<Byte> list = new ArrayList<Byte>();
+    	byte[] ray;
+    	while(file.length()>=4) {
+    		for(byte b: convert4CharsTo24Bits(file.substring(0, 4))) {
+    			list.add(b);
+    		}
+    		file=file.substring(4);
+    	}
+    	if(file.length()>0) {
+    		//convert the last 1-3 chars to bytes
+    		//problem: chars store 6 bits and bytes store 8
+    		//1 char: 1 byte, 2 unused
+    		//2 char: 2 byte, 4 unused
+    		//3 char: 3 byte 6 unused
+    		//add bytes to list
+    		byte b;
+    		byte[] bs = new byte[file.length()];
+    		char[] cs = file.toCharArray();
+    		for(int i = 0;i<file.length();i++) {
+    			switch (i) {
+    			case 0:
+    				bs[0]=(byte) (convertBase64Char(cs[0])*4);
+    				break;
+    			case 1:
+    				b = convertBase64Char(cs[1]);
+    				bs[0]+=(b>>4);
+    				bs[1]=(byte) (b<<4);
+    				break;
+    			case 2:
+    				b = convertBase64Char(cs[1]);
+    				bs[1]+=(b>>2);
+    				bs[2]=(byte) (b<<6);
+    				break;
+    			}
+    		}
+    		for(byte be: bs) {
+    			list.add(be);
+    		}
+    	} 
+    	ray=new byte[list.size()];
+    	for(int i = 0; i<ray.length;i++) {
+    		ray[i]=list.get(i).byteValue();
+    	}
+    	
+        return ray;
     }
 }

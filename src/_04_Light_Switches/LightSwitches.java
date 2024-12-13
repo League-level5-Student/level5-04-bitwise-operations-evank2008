@@ -55,7 +55,9 @@ public class LightSwitches implements GameControlScene {
      * index = 6        // return true if pink is on (bit 6 == 1)
      */
     boolean isLightOn(int index) {
-        return false;
+    	int e = (int)Math.pow(2, index);
+    	int comp = e&lightsOnOff;
+        return comp==e;
     }
     
     /*
@@ -63,7 +65,9 @@ public class LightSwitches implements GameControlScene {
      * index = 4        // turn off yellow only (set bit 4 = 1)
      */
     void turnLightOn(int index) {
-        
+        if(!isLightOn(index)) {
+        	lightsOnOff+=Math.pow(2, index);
+        }
     }
     
     /*
@@ -71,7 +75,9 @@ public class LightSwitches implements GameControlScene {
      * index = 0        // turn off blue only (set bit 0 = 0)
      */
     void turnLightOff(int index) {
-        
+    	if(isLightOn(index)) {
+        	lightsOnOff-=Math.pow(2, index);
+        }
     }
     
     /*
@@ -79,7 +85,12 @@ public class LightSwitches implements GameControlScene {
      * lightsBitmap = 0b01100110  // lights 1, 2, 5, 6 on
      */
     void turnMultiLightsOn(int lightsBitmap) {
-        
+        for(int i = 1;i<8;i++) {
+        	int e = (int) Math.pow(2, i);
+        	if((lightsBitmap&e)==e) {
+        		turnLightOn(i);
+        	}
+        }
     }
     
     /*
@@ -87,7 +98,12 @@ public class LightSwitches implements GameControlScene {
      * lightsBitmap = 0b10000001  // lights 0, 7 off
      */
     void turnMultiLightsOff(int lightsBitmap) {
-        
+    	for(int i = 1;i<8;i++) {
+        	int e = (int) Math.pow(2, i);
+        	if((lightsBitmap&e)==e) {
+        		turnLightOff(i);
+        	}
+        }
     }
     
     /*
@@ -100,7 +116,17 @@ public class LightSwitches implements GameControlScene {
      *                               orange(3) and yellow(4) on
      */
     void toggleLights(int lightsBitmap) {
-        
+    	for(int i = 1;i<8;i++) {
+        	int e = (int) Math.pow(2, i);
+        	if((lightsBitmap&e)==e) {
+        		//if its on turn off, if off turn on
+        		if((lightsOnOff&e)==e) {
+        			turnLightOff(i);
+        		} else {
+        			turnLightOn(i);
+        		}
+        	}
+        }
     }
     
     void runLightSequence1() {
