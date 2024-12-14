@@ -54,7 +54,7 @@ public class Base64Decoder {
             'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/'
     };
-
+//10000010
     //1. Complete this method so that it returns the index in
     //   the base64Chars array that corresponds to the passed in char.
     public static byte convertBase64Char(char c){
@@ -63,6 +63,7 @@ public class Base64Decoder {
     			return b;
     		}
     	}
+    	System.out.println("wee woo");
     	return -1;
     }
 
@@ -77,9 +78,9 @@ public class Base64Decoder {
     		cb[i]=convertBase64Char(s.charAt(i));
     	}
     	
-    	bs[0] = (byte) (cb[0]<<2+cb[1]>>4); //last 6 of cb[0] and first 2 of cb[1]
-    	bs[1] = (byte) (cb[1]<<4+cb[2]>>2); //last 4 of cb[1] and first 4 of cb[2]
-    	bs[2] = (byte) (cb[2]<<4+cb[3]); //last 2 of cb[2] and first 6 of cb[3]
+    	bs[0] = (byte) ((cb[0]<<2)|(cb[1]>>4)); //last 6 of cb[0] and first 2 of cb[1]
+    	bs[1] = (byte) ((cb[1]<<4)|(cb[2]>>2)); //last 4 of cb[1] and first 4 of cb[2]
+    	bs[2] = (byte) ((cb[2]<<4)|(cb[3])); //last 2 of cb[2] and first 6 of cb[3]
     	return bs;
     }
 
@@ -93,7 +94,7 @@ public class Base64Decoder {
     			list.add(b);
     		}
     		file=file.substring(4);
-    	}
+    	}/*
     	if(file.length()>0) {
     		//convert the last 1-3 chars to bytes
     		//problem: chars store 6 bits and bytes store 8
@@ -107,16 +108,16 @@ public class Base64Decoder {
     		for(int i = 0;i<file.length();i++) {
     			switch (i) {
     			case 0:
-    				bs[0]=(byte) (convertBase64Char(cs[0])*4);
+    				bs[0]=(byte) (convertBase64Char(cs[0])<<2);
     				break;
     			case 1:
     				b = convertBase64Char(cs[1]);
-    				bs[0]+=(b>>4);
+    				bs[0]|=(b>>4);
     				bs[1]=(byte) (b<<4);
     				break;
     			case 2:
-    				b = convertBase64Char(cs[1]);
-    				bs[1]+=(b>>2);
+    				b = convertBase64Char(cs[2]);
+    				bs[1]|=(b>>2);
     				bs[2]=(byte) (b<<6);
     				break;
     			}
@@ -125,11 +126,13 @@ public class Base64Decoder {
     			list.add(be);
     		}
     	} 
+    	*/
+    	//now list has all filled bytes
     	ray=new byte[list.size()];
     	for(int i = 0; i<ray.length;i++) {
+    		System.out.println(list.get(i));
     		ray[i]=list.get(i).byteValue();
     	}
-    	
         return ray;
     }
 }

@@ -48,10 +48,20 @@ public class Base64DecoderTester {
     }
 
     @Test
+    public void bigTest() {
+    	// 
+    	byte[] br = {(byte) 0b10000010, 0b00001111, 0b01100000};
+    	for(int i= 1; i<3;i++) {
+    		assertEquals(br[i],Base64Decoder.convert4CharsTo24Bits("//9/")[i]);
+    	}
+    	
+    }
+    
+    @Test
     public void testBase64StringToByteArray() {
         String file = "";
         try {
-            BufferedReader br = new BufferedReader(new FileReader("src/_04_Base64_Decoder/base64_data.txt"));
+            BufferedReader br = new BufferedReader(new FileReader("src/_05_Base64_Decoder/base64_data.txt"));
             String line = br.readLine();
             while (line != null) {
                 file += line;
@@ -66,11 +76,11 @@ public class Base64DecoderTester {
 
         byte[] bits = Base64Decoder.base64StringToByteArray(file);
         try {
-            BufferedReader br = new BufferedReader(new FileReader("src/_04_Base64_Decoder/decoded_string.txt"));
+            BufferedReader br = new BufferedReader(new FileReader("src/_05_Base64_Decoder/decoded_string.txt"));
             String line = br.readLine();
             int ctr = 0;
             while (line != null) {
-                assertEquals(bits[ctr++], Byte.parseByte(line));
+                assertEquals(Byte.parseByte(line), bits[ctr++]);
                 line = br.readLine();
             }
             br.close();
